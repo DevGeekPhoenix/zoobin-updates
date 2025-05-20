@@ -13,9 +13,8 @@ jobs:
         uses: gacts/purge-jsdelivr-cache@v1
         with:
           url: |
-            https://cdn.jsdelivr.net/gh/DevGeekPhoenix/zoobin-updates/assetmap.json
-            https://cdn.jsdelivr.net/gh/DevGeekPhoenix/zoobin-updates/latest-version.json
-            https://cdn.jsdelivr.net/gh/DevGeekPhoenix/zoobin-updates/metadata.json
-            https://cdn.jsdelivr.net/gh/DevGeekPhoenix/zoobin-updates/assets/
-            https://cdn.jsdelivr.net/gh/DevGeekPhoenix/zoobin-updates/_expo/
-            https://cdn.jsdelivr.net/gh/DevGeekPhoenix/zoobin-updates/.expo/
+            https://cdn.jsdelivr.net/gh/DevGeekPhoenix/zoobin-updates@latest/assetmap.json
+            https://cdn.jsdelivr.net/gh/DevGeekPhoenix/zoobin-updates@latest/metadata.json
+            https://cdn.jsdelivr.net/gh/DevGeekPhoenix/zoobin-updates@latest/assets/
+            https://cdn.jsdelivr.net/gh/DevGeekPhoenix/zoobin-updates@latest/_expo/
+            https://cdn.jsdelivr.net/gh/DevGeekPhoenix/zoobin-updates@latest/.expo/

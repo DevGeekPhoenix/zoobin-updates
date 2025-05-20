@@ -1,10 +1,10 @@
 {
   "android": {
-    "version": "1.0.7",
-    "url": "https://github.com/DevGeekPhoenix/zoobin-updates/releases/download/1.0.7/zoobin-v1.0.7.apk"
+    "version": "1.0.8",
+    "url": "https://github.com/DevGeekPhoenix/zoobin-updates/releases/download/1.0.8/zoobin-v1.0.8.apk"
   },
   "ios": {
-    "version": "1.0.7",
+    "version": "1.0.8",
     "url": "https://link-to-appstore"
   }
 }

@@ -1,29 +1,28 @@
-// server.js
 const express = require("express");
-const request = require("request");
+const { createProxyMiddleware } = require("http-proxy-middleware");
 const app = express();
 
-app.use((req, res) => {
-  const url =
-    "https://u.expo.dev/bb172799-1f45-4bb5-8291-0bff2b358673" + req.url;
+const TARGET = "https://u.expo.dev";
 
-  console.log("req.url", req.url);
-  console.log("url", url);
-
-  req
-    .pipe(
-      request({
-        url,
-        method: req.method,
-        headers: {
-          ...req.headers,
-          host: "u.expo.dev",
-        },
-      })
-    )
-    .on("error", (err) => res.status(500).send("Proxy Error: " + err.message))
-    .pipe(res);
-});
+app.use(
+  "/",
+  createProxyMiddleware({
+    target: TARGET,
+    changeOrigin: true,
+    pathRewrite: {
+      "^/$": "/bb172799-1f45-4bb5-8291-0bff2b358673",
+    },
+    onProxyReq: (proxyReq, req, res) => {
+      console.log("Proxying request:", req.method, req.url);
+      console.log("Headers:", req.headers);
+    },
+    onProxyRes: (proxyRes, req, res) => {
+      console.log("Proxied response:", proxyRes.statusCode, req.url);
+    },
+    selfHandleResponse: false,
+    logLevel: "debug",
+  })
+);
 
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log("Proxy server running on port " + listener.address().port);

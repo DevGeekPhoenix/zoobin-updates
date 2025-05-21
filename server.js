@@ -32,23 +32,33 @@ app.use(
     },
     on: {
       proxyReq: (proxyReq, req, res) => {
-        if (req.headers["expo-runtime-version"]) {
-          proxyReq.setHeader(
-            "expo-runtime-version",
-            req.headers["expo-runtime-version"]
-          );
+        const headersToForward = [
+          "expo-runtime-version",
+          "expo-platform",
+          "expo-protocol-version",
+          "expo-json-error",
+          "expo-embedded-update-id",
+          "expo-current-update-id",
+          "expo-api-version",
+          "eas-client-id",
+          "expo-updates-environment",
+          "accept",
+        ];
+
+        for (const h of headersToForward) {
+          if (req.headers[h]) proxyReq.setHeader(h, req.headers[h]);
         }
-        if (req.headers["expo-platform"]) {
-          proxyReq.setHeader("expo-platform", req.headers["expo-platform"]);
-        }
-        if (req.headers["expo-channel-name"]) {
-          proxyReq.setHeader(
-            "expo-channel-name",
-            req.headers["expo-channel-name"]
-          );
-        }
-        proxyReq.setHeader("accept", req.headers["accept"] || "*/*");
-        proxyReq.setHeader("user-agent", "curl/7.88.1");
+
+        proxyReq.setHeader(
+          "expo-channel-name",
+          req.headers["expo-channel-name"] || "preview"
+        );
+
+        proxyReq.setHeader(
+          "user-agent",
+          req.headers["user-agent"] || "okhttp/4.9.2"
+        );
+        proxyReq.setHeader("host", "u.expo.dev");
 
         proxyReq.removeHeader("accept-encoding");
         proxyReq.removeHeader("connection");
@@ -59,6 +69,7 @@ app.use(
         proxyReq.removeHeader("x-railway-edge");
         proxyReq.removeHeader("x-real-ip");
         proxyReq.removeHeader("x-request-start");
+
         console.log("--- Final ProxyReq Headers:", proxyReq.getHeaders());
       },
       proxyRes: (proxyRes, req, res) => {

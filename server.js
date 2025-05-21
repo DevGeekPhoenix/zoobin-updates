@@ -6,6 +6,12 @@ const EXPO_PROJECT_ID = "/bb172799-1f45-4bb5-8291-0bff2b358673";
 
 const TARGET = "https://u.expo.dev";
 
+app.use((req, res, next) => {
+  console.log("Incoming:", req.method, req.url);
+  console.log("Response:", res);
+  next();
+});
+
 app.use(
   "/",
   createProxyMiddleware({

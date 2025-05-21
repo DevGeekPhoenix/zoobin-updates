@@ -6,6 +6,11 @@ const EXPO_PROJECT_ID = "/bb172799-1f45-4bb5-8291-0bff2b358673";
 
 const TARGET = "https://u.expo.dev";
 
+app.use((req, res, next) => {
+  console.log("Device Incoming Headers:", req.headers);
+  next();
+});
+
 app.use(
   "/",
   createProxyMiddleware({
@@ -27,19 +32,24 @@ app.use(
     },
     on: {
       proxyReq: (proxyReq, req, res) => {
-        proxyReq.setHeader(
-          "expo-runtime-version",
-          req.headers["expo-runtime-version"]
-        );
-        proxyReq.setHeader("expo-platform", req.headers["expo-platform"]);
-        proxyReq.setHeader(
-          "expo-channel-name",
-          req.headers["expo-channel-name"]
-        );
+        if (req.headers["expo-runtime-version"]) {
+          proxyReq.setHeader(
+            "expo-runtime-version",
+            req.headers["expo-runtime-version"]
+          );
+        }
+        if (req.headers["expo-platform"]) {
+          proxyReq.setHeader("expo-platform", req.headers["expo-platform"]);
+        }
+        if (req.headers["expo-channel-name"]) {
+          proxyReq.setHeader(
+            "expo-channel-name",
+            req.headers["expo-channel-name"]
+          );
+        }
         proxyReq.setHeader("accept", req.headers["accept"] || "*/*");
-        // Optionally set user-agent to mimic curl
         proxyReq.setHeader("user-agent", "curl/7.88.1");
-        // Remove potentially problematic headers
+
         proxyReq.removeHeader("accept-encoding");
         proxyReq.removeHeader("connection");
         proxyReq.removeHeader("x-forwarded-for");
@@ -49,7 +59,7 @@ app.use(
         proxyReq.removeHeader("x-railway-edge");
         proxyReq.removeHeader("x-real-ip");
         proxyReq.removeHeader("x-request-start");
-        console.log("--- ProxyReq Headers:", proxyReq.getHeaders());
+        console.log("--- Final ProxyReq Headers:", proxyReq.getHeaders());
       },
       proxyRes: (proxyRes, req, res) => {
         console.log("--- ProxyRes Status:", proxyRes.statusCode);

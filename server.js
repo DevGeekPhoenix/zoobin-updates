@@ -6,23 +6,24 @@ const EXPO_PROJECT_ID = "/bb172799-1f45-4bb5-8291-0bff2b358673";
 
 const TARGET = "https://u.expo.dev";
 
-app.use((req, res, next) => {
-  console.log("Incoming:", req.method, req.url);
-  console.log("Response:", res);
-  next();
-});
-
 app.use(
   "/",
   createProxyMiddleware({
     target: TARGET,
     changeOrigin: true,
     pathRewrite: (path, req) => {
-      if (path.startsWith(EXPO_PROJECT_ID)) return path;
-
-      if (path === "/" || path === "") return EXPO_PROJECT_ID;
-
-      return `${EXPO_PROJECT_ID}${path}`;
+      console.log("--- Incoming path:", path);
+      if (path.startsWith(EXPO_PROJECT_ID)) {
+        console.log("--- Already prefixed, sending:", path);
+        return path;
+      }
+      if (path === "/" || path === "") {
+        console.log("--- Rewriting root to:", EXPO_PROJECT_ID);
+        return EXPO_PROJECT_ID;
+      }
+      const rewritten = `${EXPO_PROJECT_ID}${path}`;
+      console.log("--- Rewriting", path, "to", rewritten);
+      return rewritten;
     },
     logLevel: "debug",
   })

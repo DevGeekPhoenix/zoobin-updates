@@ -25,6 +25,14 @@ app.use(
       console.log("--- Rewriting", path, "to", rewritten);
       return rewritten;
     },
+    on: {
+      proxyReq: (proxyReq, req, res) => {
+        console.log("--- ProxyReq Headers:", proxyReq.getHeaders());
+      },
+      proxyRes: (proxyRes, req, res) => {
+        console.log("--- ProxyRes Status:", proxyRes.statusCode);
+      },
+    },
     logLevel: "debug",
   })
 );

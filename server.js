@@ -3,11 +3,13 @@ const express = require("express");
 const request = require("request");
 const app = express();
 
-const EXPO_UPDATE_URL =
-  "https://u.expo.dev/bb172799-1f45-4bb5-8291-0bff2b358673";
-
 app.use((req, res) => {
-  const url = EXPO_UPDATE_URL + req.url;
+  const url =
+    "https://u.expo.dev/bb172799-1f45-4bb5-8291-0bff2b358673" + req.url;
+
+  console.log("req.url", req.url);
+  console.log("url", url);
+
   req
     .pipe(
       request({
@@ -19,9 +21,7 @@ app.use((req, res) => {
         },
       })
     )
-    .on("error", (err) => {
-      res.status(500).send("Proxy Error: " + err.message);
-    })
+    .on("error", (err) => res.status(500).send("Proxy Error: " + err.message))
     .pipe(res);
 });
 

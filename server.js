@@ -8,7 +8,6 @@ const TARGET = "https://u.expo.dev";
 
 app.use((req, res, next) => {
   console.log("Device Incoming Headers:", req.headers);
-
   next();
 });
 

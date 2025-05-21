@@ -27,6 +27,28 @@ app.use(
     },
     on: {
       proxyReq: (proxyReq, req, res) => {
+        proxyReq.setHeader(
+          "expo-runtime-version",
+          req.headers["expo-runtime-version"]
+        );
+        proxyReq.setHeader("expo-platform", req.headers["expo-platform"]);
+        proxyReq.setHeader(
+          "expo-channel-name",
+          req.headers["expo-channel-name"]
+        );
+        proxyReq.setHeader("accept", req.headers["accept"] || "*/*");
+        // Optionally set user-agent to mimic curl
+        proxyReq.setHeader("user-agent", "curl/7.88.1");
+        // Remove potentially problematic headers
+        proxyReq.removeHeader("accept-encoding");
+        proxyReq.removeHeader("connection");
+        proxyReq.removeHeader("x-forwarded-for");
+        proxyReq.removeHeader("x-forwarded-host");
+        proxyReq.removeHeader("x-forwarded-proto");
+        proxyReq.removeHeader("x-railway-request-id");
+        proxyReq.removeHeader("x-railway-edge");
+        proxyReq.removeHeader("x-real-ip");
+        proxyReq.removeHeader("x-request-start");
         console.log("--- ProxyReq Headers:", proxyReq.getHeaders());
       },
       proxyRes: (proxyRes, req, res) => {

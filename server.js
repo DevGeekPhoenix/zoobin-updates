@@ -51,7 +51,7 @@ app.use(
 
         proxyReq.setHeader(
           "expo-channel-name",
-          req.headers["expo-channel-name"] || "preview"
+          req.headers["expo-channel-name"]
         );
 
         proxyReq.setHeader(
